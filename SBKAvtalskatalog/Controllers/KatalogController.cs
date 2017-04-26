@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Configuration;
+using Npgsql;
 
 namespace SBKAvtalskatalog.Controllers
 {
@@ -25,6 +27,42 @@ namespace SBKAvtalskatalog.Controllers
         public ActionResult TestPage()
         {
             return View();
+        }
+
+        [Route("Tabell")]
+        public ActionResult Tabell()
+        {
+            var cs = connstr();
+            var lst = new List<SBKAvtalskatalog.Models.Avtalsmodel>();
+
+            using (var conn = new NpgsqlConnection("Host=localhost;Username=postgres;Database=avtalskatalogSBK"))
+            {
+                conn.Open();
+                using (var cmd = new NpgsqlCommand())
+                {
+                    cmd.Connection = conn;
+                    cmd.CommandText = "select diarienummer, startdate, enddate, orgnummer from avtal";
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            lst.Add(new Models.Avtalsmodel
+                            {
+                                diarienummer = reader.GetInt64(0),
+                                startdate = reader.GetDateTime(1),
+                                enddate = reader.GetDateTime(2),
+                                orgnummer = reader.GetString(3)
+                            });
+                        }
+                    }
+                }
+            }
+            return View(lst);
+        }
+
+        private string connstr()
+        {
+            return "Host=localhost;Username=postgres;Database=mydb";
         }
     }
 }

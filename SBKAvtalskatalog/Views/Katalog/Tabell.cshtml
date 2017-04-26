@@ -1,0 +1,26 @@
+﻿@model IEnumerable<SBKAvtalskatalog.Models.Avtalsmodel>
+
+@{
+    ViewBag.Title = "Tabell";
+}
+
+<h2>Tabell</h2>
+
+<table class="table">
+    <tr>
+        <th>Diarienummer</th>
+        <th>Startdatum</th>
+        <th>Slutdatum</th>
+        <th>Organisationsnummer</th>
+    </tr>
+    @foreach(var avtal in Model)
+    {
+        <tr>
+            <td>@avtal.diarienummer</td>
+            <td>@avtal.startdate.ToShortDateString()</td>
+            <td>@avtal.enddate.ToShortDateString()</td>
+            <td>@avtal.orgnummer</td>
+        </tr>
+    }
+</table>
+
