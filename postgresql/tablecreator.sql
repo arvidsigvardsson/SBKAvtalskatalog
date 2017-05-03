@@ -1,5 +1,6 @@
 ﻿drop table if exists avtal;
 drop table if exists person;
+drop table if exists intaktskontering;
 
 drop type if exists avtalsstatus;
 create type avtalsstatus as enum('Aktivt', 'Inaktivt');
@@ -7,13 +8,26 @@ create type avtalsstatus as enum('Aktivt', 'Inaktivt');
 drop type if exists motpartstyp;
 create type motpartstyp as enum('Extern', 'Förvaltning', 'Kommunalt bolag');
 
+create table intaktskontering(
+	id			serial primary key,
+	konto			varchar not null,
+	kstl			varchar not null,
+	vht			varchar not null,
+	mtp			varchar not null,
+	aktivitet		varchar not null,
+	objekt			varchar not null,
+	projekt			varchar not null
+);
+	
+
 create table person(
 	id			serial primary key,
 	first_name		varchar(50) not null,
 	last_name		varchar(50) not null,
 	belagenhetsadress	varchar(50),
-	postnummer		varchar(20) not null,
-	postort			varchar(50) not null,
+	postnummer		varchar(20),
+	postort			varchar(50),
+	tfn_nummer		varchar(20),
 	epost			varchar(50) unique not null
 );
 
@@ -33,12 +47,28 @@ create table avtal(
 	kommentar		text,
 
 	avtalstecknare		integer references person not null,
-	avtalskontakt		integer references person not null
+	avtalskontakt		integer references person not null,
+
+	upphandlat_av		integer references person,
+	ansvarig_SBK		integer references person,
+	ansvarig_avd		varchar(50),
+	ansvarig_enhet		varchar(50),
+
+	avtalsinnehall		text,
+	avtalsvärde		bigint,
+
+	datakontakt		person,
+
+	intaktskontering	integer references intaktskontering,
+	fakturaadress		person,
+
+	vitalt_avtal		boolean,
+	gallringsår		date
 	
 );
 
-insert into person(first_name, last_name, belagenhetsadress, postnummer, postort, epost)
-values	('Sven', 'Andersson', 'Svedalavägen', '111 11', 'Svedala', 'sven@example.com');
+insert into person(first_name, last_name, belagenhetsadress, postnummer, postort, tfn_nummer, epost)
+values	('Sven', 'Andersson', 'Svedalavägen', '111 11', 'Svedala', '010-100100', 'sven@example.com');
 
 insert into avtal(diarienummer, startdate, enddate, orgnummer, status, avtalstecknare, avtalskontakt)
 values	(314, '2017-01-01', CURRENT_DATE, '820403', 'Aktivt', 1, 1);
