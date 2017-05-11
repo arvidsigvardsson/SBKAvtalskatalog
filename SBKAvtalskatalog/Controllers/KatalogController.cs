@@ -8,11 +8,12 @@ using Npgsql;
 
 namespace SBKAvtalskatalog.Controllers
 {
-    [RoutePrefix("Arvid")]
+    [RoutePrefix("")]
     [Route("{action=index}")]
     public class KatalogController : Controller
     {
         // GET: Katalog
+        [Route("")]
         public ActionResult Index()
         {
             return View();
@@ -27,6 +28,28 @@ namespace SBKAvtalskatalog.Controllers
         public ActionResult TestPage()
         {
             return View();
+        }
+
+        [Route("editpage")]
+        [AcceptVerbs(HttpVerbs.Get)]
+        public ActionResult EditPage()
+        {
+            var model = new Models.Avtalsmodel
+            {
+                diarienummer = 555,
+                startdate = DateTime.Now,
+                enddate = DateTime.Now,
+                orgnummer = "7707077777"
+            };
+            return View(model);
+        }
+
+        [Route("editpage")]
+        [AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult EditPage(Models.Avtalsmodel model)
+        {
+            System.Diagnostics.Debug.WriteLine("Diarienummer:" + model.diarienummer);
+            return Redirect("/Tabell");
         }
 
         [Route("Tabell")]

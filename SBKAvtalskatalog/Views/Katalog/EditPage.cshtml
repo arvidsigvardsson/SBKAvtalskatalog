@@ -1,0 +1,20 @@
+﻿@model SBKAvtalskatalog.Models.Avtalsmodel
+@{
+    ViewBag.Title = "EditPage";
+}
+
+<h2>EditPage</h2>
+
+@using (Html.BeginForm())
+{
+    <fieldset>
+        <legend>Redigera avtal</legend>
+
+        <div class="editor-field">
+            Diarienummer<br />
+            @Html.TextBoxFor(model => model.diarienummer)
+        </div>
+
+        <input type="submit" value="Uppdatera avtal"
+    </fieldset>
+}
