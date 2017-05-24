@@ -12,7 +12,7 @@ drop type if exists sbkavtal.avtalsstatus;
 create type sbkavtal.avtalsstatus as enum('Aktivt', 'Inaktivt');
 
 drop type if exists sbkavtal.motpartstyp;
-create type sbkavtal.motpartstyp as enum('Extern', 'Förvaltning', 'Kommunalt bolag');
+create type sbkavtal.motpartstyp as enum('Extern', 'Förvaltning', 'Kommunalt bolag', 'Uppgift saknas);
 
 drop type if exists sbkavtal.avtalsinnehallstyp;
 create type sbkavtal.avtalsinnehallstyp as enum('avtalsinnehåll 1', 'avtalsinnehåll 2', 'avtalsinnehåll 3');
@@ -25,7 +25,7 @@ create table sbkavtal.person(
 	postnummer		varchar(20),
 	postort			varchar(50),
 	tfn_nummer		varchar(20),
-	epost			varchar(50) unique
+	epost			varchar(50)
 );
 
 create table sbkavtal.fakturaadress(
